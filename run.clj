@@ -33,7 +33,16 @@
 (def clients-over-including-errors
   (doall
    (filter #(not (nil? %))
-           (map #(client-over (get-sub-info %)) active-subs))))
+           (map (fn [sub]
+                  (let [sub-id (get sub "guid")
+                        client-name (get sub "clientName")]
+                    (assoc
+                     (do
+                       (println (str "Checking... " client-name))
+                       (Thread/sleep 300)
+                       (client-over (get-sub-info sub-id)))
+                     :sub-id sub-id)))
+                active-subs))))
 
 (def clients-with-error (filter
                          #(contains? % :error)
@@ -44,9 +53,7 @@
                    clients-over-including-errors))
 
 (spit "./clients-over.edn" (prn-str  clients-over))
-
-(println (str "Subs Over Usage Limits: " (count clients-over)))
-(println (str "Subs With Errors Limits: " (count clients-with-error)))
+(spit "./clients-over-error.edn" (prn-str  clients-with-error))
 
 ; (def test (reduce
 ;            (fn [acc sub]
