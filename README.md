@@ -7,3 +7,5 @@ Steps to use:
 3. Run script and wait
 
 Sometimes you will get a 500 ruining your script run... oh well that is just the API 😉 and you gotta do it again.
+
+If you get a 401, you authentication bearer token is bad.
