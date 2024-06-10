@@ -32,7 +32,7 @@
 
 (def clients-over-including-errors
   (doall
-   (filter #(not (nil? %))
+   (filter #(or (contains? % :error) (contains? % :storage))
            (map (fn [sub]
                   (let [sub-id (get sub "guid")
                         client-name (get sub "clientName")]
